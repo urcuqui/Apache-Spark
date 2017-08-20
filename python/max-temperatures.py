@@ -1,11 +1,10 @@
-#import libraries
 from pyspark import SparkContext, SparkConf
  
 #configuration
-conf = SparkConf().setMaster("local").setAppName("minTemperature")
+conf = SparkConf().setMaster("local").setAppName("maxTemperature")
 sc = SparkContext(conf =  conf)
 
-lines =  sc.textFile("file:///D:/Developer/Apache-Spark/datasets/1800.csv")
+lines =  sc.textFile("file:///G:/Research/Apache-Spark/datasets/1800.csv")
 
 
 def parseLine(line):
@@ -17,13 +16,13 @@ def parseLine(line):
     return (stationID, entryType, temperature)
     
 parsedLines = lines.map(parseLine)
-#filter the rows that only have TMIN
-minTemps =  parsedLines.filter(lambda x: "TMIN" in x[1])
+#filter the rows that only have TMAX
+minTemps =  parsedLines.filter(lambda x: "TMAX" in x[1])
 #eliminate the column entryType
 stationTemps =  minTemps.map(lambda x: (x[0], x[2]))
 
 #it finds the minimum temperature by stationID
-minTemps = stationTemps.reduceByKey(lambda x,y: min(x,y))
+minTemps = stationTemps.reduceByKey(lambda x,y: max(x,y))
 
 results = minTemps.collect()
 for result in results:

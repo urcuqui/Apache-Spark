@@ -42,12 +42,24 @@ def loadYoutubeInformation(f):
 #    print(df.first())
             
 
-#if __name__ == "__main__":
-spark = SparkSession.builder.config("spark.sql.warehouse.dir", "file:///C:/temp").appName("YoutubeAnalytics").getOrCreate()
-sqlContext = SQLContext(spark)
-lines = sqlContext.read.json("D:/Developer/Midgame/datasets/youtube-scraper-3-2017-01-06-17-28-52-3e9bfa2b-d8a2-45b4-8a30-3a30a5160aad")    
-parts = lines.map(lambda p: Row(
-print(parts)
+if __name__ == "__main__":
+    spark = SparkSession.builder.config("spark.sql.warehouse.dir", "file:///C:/temp").appName("YoutubeAnalytics").getOrCreate()
+    sqlContext = SQLContext(spark)
+    ok = spark.sparkContext.textFile("D:/Developer/Midgame/datasets/youtube-scraper-3-2017-01-06-23-43-08-f3ee4357-bbc5-4a88-8bab-39433791168a", "D:/Developer/Midgame/datasets/youtube-scraper-3-2017-01-06-17-28-52-3e9bfa2b-d8a2-45b4-8a30-3a30a5160aad")
+    
+    
+    #the data in 2017 has the tag statistics.    
+    #lines = sqlContext.read.json("D:/Developer/Midgame/datasets/youtube-scraper-3-2017-01-06-17-28-52-3e9bfa2b-d8a2-45b4-8a30-3a30a5160aad") 
+    lines = sqlContext.read.json("D:/Developer/Midgame/datasets/youtube-scraper-3-2017-01-06-23-43-08-f3ee4357-bbc5-4a88-8bab-39433791168a")      
+    print(lines.printSchema())
+    data = lines.select("items.id", "items.statistics.commentCount", "items.statistics.dislikeCount", "items.statistics.hiddenSubscriberCount", "items.statistics.likeCount", \
+    "items.statistics.subscriberCount", "items.statistics.videoCount", "items.statistics.viewCount")
+    print(data.first())    
+    #the data in 2016 has another schema different to 2017 (it has information about ghe author)
+    
+
+#parts = lines.map(lambda p: Row(
+#print(parts)
 # people = lines.map(loadYoutubeInformation)
 # schemaPeople = spark.createDataFrame(people).cache()
 # schemaPeople.createOrReplaceTempView("youtube")

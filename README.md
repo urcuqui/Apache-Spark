@@ -2,7 +2,7 @@
 
 ## Description ##
 
-This repository has some examples of Hadoop Spark, specially when I explored some courses in order to learn and to 
+This repository has some examples of Hadoop Spark, specially when I explored some courses in order to learn and 
 explore about the benefits about Spark with Big Data.
 
 ## Python ##
